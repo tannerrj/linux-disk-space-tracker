@@ -28,7 +28,6 @@ Each time you run the script, it will add a new row to the HTML table with the c
 
 ## Guidelines
 
-
 ### Description: Questions to Consider**
 
  * What is the app for?

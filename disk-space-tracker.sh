@@ -1,28 +1,35 @@
+```bash
+
 #!/bin/bash
 
-# Define the HTML file to store the table data
-html_file="disk_space_report.html"
+# Function to log verbose output to logging.txt
+log_verbose() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> logging.txt
+}
 
-# Check if the HTML file exists; if not, create it with a basic structure
-if [ ! -f "$html_file" ]; then
-    echo "<html><head><title>Disk Space Report</title></head><body>" > "$html_file"
-    echo "<h1>Disk Space Report</h1>" >> "$html_file"
-    echo "<table border='1'>" >> "$html_file"
-    echo "<tr><th>Date</th><th>Command</th><th>Disk Space Used (Bytes)</th></tr>" >> "$html_file"
-    echo "</table>" >> "$html_file"
-    echo "</body></html>" >> "$html_file"
+# Check if logging.txt exists, and create it if not
+if [ ! -f logging.txt ]; then
+  touch logging.txt
 fi
 
+# Run the df command to get disk space information and store it in a variable
+df_output=$(df -h)
+
 # Get the current date and time
-current_date=$(date +"%Y-%m-%d %H:%M:%S")
+current_datetime=$(date '+%Y-%m-%d %H:%M:%S')
 
-# Run the disk space check and capture the output in bytes
-disk_space_used=$(df --output=used / | awk 'NR==2 {print $1}')
+# Convert disk space usage to bytes
+disk_usage_bytes=$(df --output=used -B 1 | awk 'NR==2')
 
-# Append the data to the HTML table
-echo "<tr><td>$current_date</td><td>df --output=used /</td><td>$disk_space_used</td></tr>" >> "$html_file"
+# Add a new row to the HTML table with date, time, and disk space usage
+new_row="<tr><td>$current_datetime</td><td>$disk_usage_bytes</td></tr>"
 
-# Close the HTML table
-echo "</table>" >> "$html_file"
+# Insert the new row above the closing </table> tag in the HTML file
+sed -i "/<\/table>/i $new_row" disk_space_report.html
 
-echo "Disk space check complete. Data added to $html_file."
+# Log verbose output
+log_verbose "Disk space information collected and added to the table."
+
+echo "Disk space information collected and added to the table."
+
+```

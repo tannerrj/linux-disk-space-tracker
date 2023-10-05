@@ -4,46 +4,75 @@ Linux Disk Space Tracker
 
 ## Inquiry
 
-User
 ```
-Show me a bash script that runs a disk space check in bytes and writes that info to a html table that includes the previous command, date, disk space used and continuously adds this information to the table
+A bash script that collects disk space with the following features:
+1. date and time that the command is run is added to the table
+2. disk space used is in bytes is added to the table
+3. Each time the script is run,  that row is inserted above the closing </table> tag
+4. compatible with sed version 4.8-1ubuntu2
+5. write verbose output of the script to local logging.txt file during the command execution
+
 ```
 
 ### Results
 
-Certainly! Here's a Bash script that checks disk space in bytes, writes the information to an HTML table, and appends the data to the table in an HTML file every time it's run:
+You can create a Bash script that collects disk space information and adds it to an HTML table while meeting the specified requirements. Below is a script that accomplishes this:
 
 ```bash
+
 #!/bin/bash
 
-# Define the HTML file to store the table data
-html_file="disk_space_report.html"
+# Function to log verbose output to logging.txt
+log_verbose() {
+  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> logging.txt
+}
 
-# Check if the HTML file exists; if not, create it with a basic structure
-if [ ! -f "$html_file" ]; then
-    echo "<html><head><title>Disk Space Report</title></head><body>" > "$html_file"
-    echo "<h1>Disk Space Report</h1>" >> "$html_file"
-    echo "<table border='1'>" >> "$html_file"
-    echo "<tr><th>Date</th><th>Command</th><th>Disk Space Used (Bytes)</th></tr>" >> "$html_file"
-    echo "</table>" >> "$html_file"
-    echo "</body></html>" >> "$html_file"
+# Check if logging.txt exists, and create it if not
+if [ ! -f logging.txt ]; then
+  touch logging.txt
 fi
 
+# Run the df command to get disk space information and store it in a variable
+df_output=$(df -h)
+
 # Get the current date and time
-current_date=$(date +"%Y-%m-%d %H:%M:%S")
+current_datetime=$(date '+%Y-%m-%d %H:%M:%S')
 
-# Run the disk space check and capture the output in bytes
-disk_space_used=$(df --output=used / | awk 'NR==2 {print $1}')
+# Convert disk space usage to bytes
+disk_usage_bytes=$(df --output=used -B 1 | awk 'NR==2')
 
-# Append the data to the HTML table
-echo "<tr><td>$current_date</td><td>df --output=used /</td><td>$disk_space_used</td></tr>" >> "$html_file"
+# Add a new row to the HTML table with date, time, and disk space usage
+new_row="<tr><td>$current_datetime</td><td>$disk_usage_bytes</td></tr>"
 
-# Close the HTML table
-echo "</table>" >> "$html_file"
+# Insert the new row above the closing </table> tag in the HTML file
+sed -i "/<\/table>/i $new_row" disk_space_report.html
 
-echo "Disk space check complete. Data added to $html_file."
+# Log verbose output
+log_verbose "Disk space information collected and added to the table."
+
+echo "Disk space information collected and added to the table."
+
 ```
 
-This script first checks if the HTML file (`disk_space_report.html`) exists. If it doesn't exist, it creates a basic HTML structure with a table to store the data. It then gets the current date and runs the `df` command to check the disk space used in bytes. Finally, it appends this information to the HTML table and saves it to the HTML file.
+Make sure to create an HTML file named `disk_space_report.html` with the following content before running the script:
 
-Each time you run the script, it will add a new row to the HTML table with the current date, the command executed, and the disk space used in bytes. This way, you can continuously monitor disk space usage and keep a historical record in the HTML file.
+```html
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Disk Space Report</title>
+</head>
+<body>
+  <table>
+    <tr>
+      <th>Date and Time</th>
+      <th>Disk Space Used (bytes)</th>
+    </tr>
+  </table>
+</body>
+</html>
+
+```
+
+This script will run the `df` command to collect disk space information, convert the usage to bytes, add a new row with date and time, and insert it into the HTML table. It also logs verbose output to `logging.txt` as specified. Please make sure to adjust the file paths and permissions as needed.
