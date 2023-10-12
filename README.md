@@ -39,7 +39,7 @@ Each time you run the script, it will add a new row to the HTML table with the c
 
 ## Installation:
 
-TODO: What are the steps required to install your project? Provide a step-by-step description of how to get the development environment running.
+No special requirements beyond a working Linux installation is required.
 
 ## Usage:
 
