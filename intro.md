@@ -6,73 +6,51 @@ Linux Disk Space Tracker
 
 ```
 A bash script that collects disk space with the following features:
-1. date and time that the command is run is added to the table
-2. disk space used is in bytes is added to the table
-3. Each time the script is run,  that row is inserted above the closing </table> tag
-4. compatible with sed version 4.8-1ubuntu2
-5. write verbose output of the script to local logging.txt file during the command execution
+1. date that the command is run is added to the csv file
+2. time that the command is run is added to the csv file
+3. disk space used in bytes is added to the csv file
+4. the csv file has has labels at the top row of the following: date, time, used disk space (bytes)
+5. Each time the script is run,  that row is inserted at the bottom row of the csv file
+6. compatible with sed version 4.8-1ubuntu2
+7. write verbose output of the script to local logging.txt file during the command execution
 
 ```
 
 ### Results
 
-You can create a Bash script that collects disk space information and adds it to an HTML table while meeting the specified requirements. Below is a script that accomplishes this:
+You can create a Bash script that collects disk space information and logs it to a CSV file with the specified features. Here's a sample script for achieving this:
 
 ```bash
-
 #!/bin/bash
 
-# Function to log verbose output to logging.txt
-log_verbose() {
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> logging.txt
-}
-
-# Check if logging.txt exists, and create it if not
-if [ ! -f logging.txt ]; then
-  touch logging.txt
-fi
-
-# Run the df command to get disk space information and store it in a variable
-df_output=$(df -h)
+# Define the path to the CSV file
+csv_file="disk_space.csv"
 
 # Get the current date and time
-current_datetime=$(date '+%Y-%m-%d %H:%M:%S')
+current_date=$(date +"%Y-%m-%d")
+current_time=$(date +"%H:%M:%S")
 
-# Convert disk space usage to bytes
-disk_usage_bytes=$(df --output=used -B 1 | awk 'NR==2')
+# Get disk space used in bytes
+disk_space_used=$(df --output=used / | tail -n 1)
 
-# Add a new row to the HTML table with date, time, and disk space usage
-new_row="<tr><td>$current_datetime</td><td>$disk_usage_bytes</td></tr>"
+# Check if the CSV file exists; if not, create it with headers
+if [ ! -e "$csv_file" ]; then
+    echo "date,time,used_disk_space_bytes" > "$csv_file"
+fi
 
-# Insert the new row above the closing </table> tag in the HTML file
-sed -i "/<\/table>/i $new_row" disk_space_report.html
+# Add the current data to the CSV file
+echo "$current_date,$current_time,$disk_space_used" >> "$csv_file"
 
-# Log verbose output
-log_verbose "Disk space information collected and added to the table."
+# Log verbose output to a local logging.txt file
+log_file="logging.txt"
+echo "Script started at $(date +"%Y-%m-%d %H:%M:%S")" > "$log_file"
+echo "Collected disk space information:" >> "$log_file"
+echo "Date: $current_date" >> "$log_file"
+echo "Time: $current_time" >> "$log_file"
+echo "Used Disk Space (bytes): $disk_space_used" >> "$log_file"
+echo "Script finished at $(date +"%Y-%m-%d %H:%M:%S")" >> "$log_file"
 
-echo "Disk space information collected and added to the table."
-
+echo "Disk space information collected and logged to $csv_file."
 ```
 
-Make sure to create an HTML file named `disk_space_report.html` with the following content before running the script:
-
-```html
-
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Disk Space Report</title>
-</head>
-<body>
-  <table>
-    <tr>
-      <th>Date and Time</th>
-      <th>Disk Space Used (bytes)</th>
-    </tr>
-  </table>
-</body>
-</html>
-
-```
-
-This script will run the `df` command to collect disk space information, convert the usage to bytes, add a new row with date and time, and insert it into the HTML table. It also logs verbose output to `logging.txt` as specified. Please make sure to adjust the file paths and permissions as needed.
+Make sure you save this script to a file, make it executable with `chmod +x script.sh`, and then you can run it using `./script.sh`. It will create or update the CSV file, add the necessary headers if needed, and log the information to a separate `logging.txt` file. This script is compatible with most common versions of `sed`, including the one you mentioned.
