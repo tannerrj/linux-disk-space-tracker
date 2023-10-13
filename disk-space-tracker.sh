@@ -1,35 +1,30 @@
-```bash
-
 #!/bin/bash
 
-# Function to log verbose output to logging.txt
-log_verbose() {
-  echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" >> logging.txt
-}
-
-# Check if logging.txt exists, and create it if not
-if [ ! -f logging.txt ]; then
-  touch logging.txt
-fi
-
-# Run the df command to get disk space information and store it in a variable
-df_output=$(df -h)
+# Define the path to the CSV file
+csv_file="disk_space.csv"
 
 # Get the current date and time
-current_datetime=$(date '+%Y-%m-%d %H:%M:%S')
+current_date=$(date +"%Y-%m-%d")
+current_time=$(date +"%H:%M:%S")
 
-# Convert disk space usage to bytes
-disk_usage_bytes=$(df --output=used -B 1 | awk 'NR==2')
+# Get disk space used in bytes
+disk_space_used=$(df --output=used / | tail -n 1)
 
-# Add a new row to the HTML table with date, time, and disk space usage
-new_row="<tr><td>$current_datetime</td><td>$disk_usage_bytes</td></tr>"
+# Check if the CSV file exists; if not, create it with headers
+if [ ! -e "$csv_file" ]; then
+    echo "date,time,used_disk_space_bytes" > "$csv_file"
+fi
 
-# Insert the new row above the closing </table> tag in the HTML file
-sed -i "/<\/table>/i $new_row" disk_space_report.html
+# Add the current data to the CSV file
+echo "$current_date,$current_time,$disk_space_used" >> "$csv_file"
 
-# Log verbose output
-log_verbose "Disk space information collected and added to the table."
+# Log verbose output to a local logging.txt file
+log_file="logging.txt"
+echo "Script started at $(date +"%Y-%m-%d %H:%M:%S")" > "$log_file"
+echo "Collected disk space information:" >> "$log_file"
+echo "Date: $current_date" >> "$log_file"
+echo "Time: $current_time" >> "$log_file"
+echo "Used Disk Space (bytes): $disk_space_used" >> "$log_file"
+echo "Script finished at $(date +"%Y-%m-%d %H:%M:%S")" >> "$log_file"
 
-echo "Disk space information collected and added to the table."
-
-```
+echo "Disk space information collected and logged to $csv_file."
