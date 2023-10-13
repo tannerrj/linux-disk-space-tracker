@@ -22,13 +22,21 @@ sh disk-space-tracker.sh
 
 ## Workflow Summary
 
-This script first checks if the HTML file (`disk_space_report.html`) exists. If it doesn't exist, it creates a basic HTML structure with a table to store the data. It then gets the current date and runs the `df` command to check the disk space used in bytes. Finally, it appends this information to the HTML table and saves it to the HTML file.
+This Bash script performs the following tasks:
 
-Each time you run the script, it will add a new row to the HTML table with the current date, the command executed, and the disk space used in bytes. This way, you can continuously monitor disk space usage and keep a historical record in the HTML file.
+ 1. It defines the path to a CSV file named `disk_space.csv.`
+ 2. It gets the current date and time and stores them in the variables `current_date` and `current_time`.
+ 3. It calculates the amount of disk space used in bytes by running the `df` command and extracting the `used` column value for the root directory (/). The result is stored in the `disk_space_used` variable.
+ 4. It checks if the CSV file (`disk_space.csv`) exists. If it does not exist, it creates the file and adds a header line with the column names: `date,` `time,` and `used_disk_space_bytes.`
+ 5. It appends the current date, time, and the calculated disk space usage to the CSV file, creating a new row with this data.
+ 6. It logs verbose output to a local `logging.txt` file, including the start time, collected disk space information, and the script's finish time.
+ 7. Finally, it prints a message to the console indicating that disk space information has been collected and logged to the `disk_space.csv` file.
+
+Overall, this script is designed to collect disk space usage information for the root directory, store it in a CSV file, and create a log file with detailed information about the process. It provides a basic form of system monitoring and record-keeping for disk space usage.
 
 ## Guidelines
 
-### Description: Questions to Consider**
+### Description: Questions to Consider
 
  * What is the app for?
    * Anyone looking to track and log disk space utilization over time due to system updates, software installations, regular use, and/or data hoarding.
