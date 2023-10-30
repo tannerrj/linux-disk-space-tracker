@@ -55,7 +55,9 @@ TODO: Provide instructions and examples for use. Include screenshots as needed.
 
 ## Contributing
 
-Contributions are welcome. Creating a fork on this code base is also welcome.
+ * Contributions are welcome.
+ * Pull requests are welcome.
+ * Creating a fork on this code base is also welcome.
 
 ## Questions:
 
