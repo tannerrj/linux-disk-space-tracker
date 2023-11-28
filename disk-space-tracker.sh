@@ -3,7 +3,7 @@
 # Step 1: Define the path to the CSV file
 csv_file="disk_space.csv"
 
-# Get the current date and time
+# Step 2: Get the current date and time
 current_date=$(date +"%Y-%m-%d")
 current_time=$(date +"%H:%M:%S")
 
