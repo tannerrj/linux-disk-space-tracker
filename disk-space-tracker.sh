@@ -27,4 +27,5 @@ echo "Time: $current_time" >> "$log_file"
 echo "Used Disk Space (bytes): $disk_space_used" >> "$log_file"
 echo "Script finished at $(date +"%Y-%m-%d %H:%M:%S")" >> "$log_file"
 
+# Step 7: Indicate the script has finished running
 echo "Disk space information collected and logged to $csv_file."
