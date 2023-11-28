@@ -15,7 +15,7 @@ if [ ! -e "$csv_file" ]; then
     echo "date,time,used_disk_space_bytes" > "$csv_file"
 fi
 
-# Add the current data to the CSV file
+# Step 5: Add the current data to the CSV file
 echo "$current_date,$current_time,$disk_space_used" >> "$csv_file"
 
 # Log verbose output to a local logging.txt file
