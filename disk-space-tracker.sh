@@ -10,7 +10,7 @@ current_time=$(date +"%H:%M:%S")
 # Step 3: Get disk space used in bytes
 disk_space_used=$(df --output=used / | tail -n 1)
 
-# Check if the CSV file exists; if not, create it with headers
+# Step 4: Check if the CSV file exists; if not, create it with headers
 if [ ! -e "$csv_file" ]; then
     echo "date,time,used_disk_space_bytes" > "$csv_file"
 fi
