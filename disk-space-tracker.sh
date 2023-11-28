@@ -18,7 +18,7 @@ fi
 # Step 5: Add the current data to the CSV file
 echo "$current_date,$current_time,$disk_space_used" >> "$csv_file"
 
-# Log verbose output to a local logging.txt file
+# Step 6: Log verbose output to a local logging.txt file
 log_file="logging.txt"
 echo "Script started at $(date +"%Y-%m-%d %H:%M:%S")" > "$log_file"
 echo "Collected disk space information:" >> "$log_file"
