@@ -51,7 +51,26 @@ No special requirements beyond a working Linux installation is required.
 
 ## Usage:
 
-TODO: Provide instructions and examples for use. Include screenshots as needed.
+Sample screen output when running the shell command:
+
+```shell
+
+$ sh disk-space-tracker.sh
+Disk space information collected and logged to disk_space.csv.
+
+$ cat disk_space.csv
+date,time,used_disk_space_bytes
+2023-11-29,00:38:58,1317849496
+
+$ sh disk-space-tracker.sh
+Disk space information collected and logged to disk_space.csv.
+
+$ cat disk_space.csv
+date,time,used_disk_space_bytes
+2023-11-29,00:38:58,1317849496
+2023-11-29,00:50:58,1317850460
+
+```
 
 ## Contributing
 
