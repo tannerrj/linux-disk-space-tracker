@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Script: disk-space-tracker.sh
+# Author: Rick Tanner via ChatGPT
+# Description: This script that checks disk space in bytes, writes the information to an HTML table, and appends the data to the table in an HTML file every time it's run.
+
 # Step 1: Define the path to the CSV file
 csv_file="disk_space.csv"
 
