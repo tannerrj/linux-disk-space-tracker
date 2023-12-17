@@ -4,6 +4,8 @@
 # Author: Rick Tanner via ChatGPT
 # Description: This script that checks disk space in bytes, writes the information to an HTML table, and appends the data to the table in an HTML file every time it's run.
 # Project URL: https://github.com/tannerrj/linux-disk-space-tracker
+# License: MIT License
+
 
 # Step 1: Define the path to the CSV file
 csv_file="disk_space.csv"
